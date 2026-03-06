@@ -2,6 +2,13 @@ const displaySynonyms=(arr)=>{
     const createElement = arr.map(el => `<span class="btn ">${el}</span>`)
     return createElement.join(' ');
 }
+
+// listening function 
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
 // console.log('i am from index.js files');
 const loadLesson=()=>{
     fetch('https://openapi.programming-hero.com/api/levels/all')
@@ -124,7 +131,7 @@ const displayWord =(words)=>{
                 <h4 class="font-bangla text-xl font-semibold">"${word.meaning ? word.meaning : 'No meaning found'} / ${word.pronunciation ? word.pronunciation:"No Pronounciation found"}"</h4>
                 <div class="flex justify-between ">
                 <button  id="modal-btn" onclick="openModal(${word.id})" class="btn  bg-[#1A91FF20] text-[#374957] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
-                <button class="btn bg-[#1A91FF20] text-[#374957] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
+                <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91FF20] text-[#374957] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
                 </div>
             </div>
         `
@@ -144,7 +151,7 @@ document.getElementById('search-btn').addEventListener('click',()=>{
     .then(res => res.json())
     .then(data => {
         const allWord = data.data;
-        console.log(allWord)
+        // console.log(allWord)
         const filterWord = allWord.filter((word)=>word.word.toLowerCase().includes(searchWord));
         console.log(filterWord);
         displayWord(filterWord);
